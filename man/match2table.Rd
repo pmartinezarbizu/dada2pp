@@ -36,7 +36,7 @@ col <- match2table(iris$Species,irc,'col')
 pch <- match2table(iris$Species,irc,'pch')
 pch2 <- match2table(iris$Species,irc,'pch2')
 
-add space below graph
+#add space below graph
 par(oma = c(2, 0, 0, 0),xpd=NA)
 plot(iris[,1],iris[,3],pch=pch,bg=col,cex=2,xlab='Sepal length',ylab='Petal length')
 legend(min(iris[,1]), min(iris[,3])-2,bty='n',ncol=3, pt.cex=1.5, legend=irc$class,pch=irc$pch2, col=as.vector(irc$col))
