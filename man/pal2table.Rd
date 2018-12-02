@@ -37,16 +37,27 @@ by match2table. The later function can be used to create a vector of colors and 
 The function will assign the colors and symbols matching the name of factors in the data frame to the provided vector of names. 
 pal2table has a plot method which will plot the assigned colors and symbols together with the names of the factors.
 The built-in color palette is modified from 'brocolors' from package 'broman' by Karl W Broman. It accepts changing the alpha value using the argument alpha.
-Note that using a different color palette with argument pal will probably inabilitate the alpha modulation. Please adjust alpha in your palette forehand.
+Using a different color palette with argument pal will probably inabilitate the alpha modulation. Please adjust alpha in your palette forehand.
+Note that you need to coerce col column to a vector if you want to use it directly from the pal2table object.
+See the legend example with iris below.
 }
 \examples{
 data(iris)
 irc <- pal2table(iris$Species)
 plot(irc)
 
+#example with iris data
 col <- match2table(iris$Species,irc,'col')
 pch <- match2table(iris$Species,irc,'pch')
-plot(iris[,1],iris[,3],pch=pch,bg=col,cex=2)
+pch2 <- match2table(iris$Species,irc,'pch2')
+
+add space below graph
+par(oma = c(2, 0, 0, 0),xpd=NA)
+plot(iris[,1],iris[,3],pch=pch,bg=col,cex=2,xlab='Sepal length',ylab='Petal length')
+legend(min(iris[,1]), min(iris[,3])-2,bty='n',ncol=3, pt.cex=1.5, legend=irc$class,pch=irc$pch2, col=as.vector(irc$col))
+legend(min(iris[,1]), min(iris[,3])-2,bty='n',ncol=3, pt.cex=1.5, legend=irc$class,pch=irc$pch)
+
+#example with barplot
 barplot(as.matrix(iris[,-c(5)]),col=col,border=NA)
 
 }
