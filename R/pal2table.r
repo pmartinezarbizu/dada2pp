@@ -40,7 +40,7 @@
 #'
 #' col <- match2table(iris$Species,irc,'col')
 #' pch <- match2table(iris$Species,irc,'pch')
-#' plot(iris[,1],iris[,3],pch=pch,bg=col,cex=2)
+#' plot(iris[,1],iris[,3],pch=pch,bg=col,cex=2,xlab='Sepal length',ylab='Petal length')
 #' barplot(as.matrix(iris[,-c(5)]),col=col,border=NA)
 #'
 #'@export pal2table
