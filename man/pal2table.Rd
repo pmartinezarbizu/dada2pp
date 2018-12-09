@@ -5,7 +5,7 @@
 \title{Color Palette to Table}
 \usage{
 pal2table(x, pch = 21:24, pch2 = c(19, 15, 18, 17), alpha = 220,
-  pal = colors)
+  pal = "bro2")
 }
 \arguments{
 \item{x}{A vector of factors}
@@ -36,8 +36,9 @@ pal2table will create a data frame assigning colors and symbols to factors. An o
 by match2table. The later function can be used to create a vector of colors and symbols to be used by plot graphical parameters col, bg, fg, or pch.
 The function will assign the colors and symbols matching the name of factors in the data frame to the provided vector of names. 
 pal2table has a plot method which will plot the assigned colors and symbols together with the names of the factors.
-The built-in color palette is modified from 'brocolors' from package 'broman' by Karl W Broman. It accepts changing the alpha value using the argument alpha.
+The built-in color palette 'bro2' is modified from 'brocolors' from package 'broman' by Karl W Broman. It accepts changing the alpha value using the argument alpha.
 Using a different color palette with argument pal will probably inabilitate the alpha modulation. Please adjust alpha in your palette forehand.
+A second color palette 'c25' is modified from Kevin Wright https://stackoverflow.com/questions/9563711/r-color-palettes-for-many-data-classes.
 Note that you need to coerce col column to a vector if you want to use it directly from the pal2table object.
 See the legend example with iris below.
 }

@@ -19,8 +19,9 @@
 #' by match2table. The later function can be used to create a vector of colors and symbols to be used by plot graphical parameters col, bg, fg, or pch.
 #' The function will assign the colors and symbols matching the name of factors in the data frame to the provided vector of names. 
 #' pal2table has a plot method which will plot the assigned colors and symbols together with the names of the factors.
-#' The built-in color palette is modified from 'brocolors' from package 'broman' by Karl W Broman. It accepts changing the alpha value using the argument alpha.
+#' The built-in color palette 'bro2' is modified from 'brocolors' from package 'broman' by Karl W Broman. It accepts changing the alpha value using the argument alpha.
 #' Using a different color palette with argument pal will probably inabilitate the alpha modulation. Please adjust alpha in your palette forehand.
+#' A second color palette 'c25' is modified from Kevin Wright https://stackoverflow.com/questions/9563711/r-color-palettes-for-many-data-classes.
 #' Note that you need to coerce col column to a vector if you want to use it directly from the pal2table object.
 #' See the legend example with iris below.  
 #'  
@@ -58,13 +59,13 @@
 #'@export pal2table
 #'@seealso \code{\link{match2table}} 
 
-pal2table <- function(x, pch = 21:24, pch2 = c(19,15,18,17), alpha=220, pal=colors) {
+pal2table <- function(x, pch = 21:24, pch2 = c(19,15,18,17), alpha=220, pal='bro2') {
 
 if((inherits(x,'numeric'))) {
         warning("x numeric values coerced to factors\n ")}
 		
  	# define some colors	
-	colors <- c(
+	bro2 <- c(
 	'lightblue' =rgb(102,203,254,maxColorValue=255,alpha=alpha),
 	'pink' =rgb(254,102,254,maxColorValue=255,alpha=alpha),
 	'green' =rgb(102,254,102,maxColorValue=255,alpha=alpha),
@@ -87,6 +88,47 @@ if((inherits(x,'numeric'))) {
 	'mypink' =rgb(250,150,200,max=255,alpha=alpha),
 	'lightpurple'=rgb(190,192,50,maxColorValue=255,alpha=alpha)
 	)
+	
+	##color palette from Kevin Wright https://stackoverflow.com/questions/9563711/r-color-palettes-for-many-data-classes
+    c25 <- c("#6A3D9A",# purple
+	"#E31A1C", # red
+	"green4",
+	"dodgerblue2", 
+	"#FF7F00", # orange
+	"black",
+	"gold1",
+	"skyblue2",
+	"#FB9A99", # lt pink
+	"palegreen2",
+	"#CAB2D6", # lt purple
+	"#FDBF6F", # lt orange
+	"gray70",
+	"khaki2",
+	"maroon",
+	"orchid1",
+	"deeppink1",
+	"blue1",
+	"steelblue4",
+	"darkturquoise",
+	"green1",
+	"yellow4",
+	"yellow3",
+	"darkorange4",
+	"brown")
+
+	ifelse(pal %in% c('c25','bro2','c25bro2','bro2c25'),
+	if (pal=='c25'){
+	pal=c25
+	}else if (pal=='bro2'){
+	pal=bro2
+	}else if (pal=='c25bro2'){
+	pal=c(c25,bro2)
+	}else if (pal=='bro2c25'){
+	pal=c(bro2,c25)
+	},pal)
+
+
+	
 	
 	# coerce x to factor
 	x <- as.factor(x)
