@@ -5,7 +5,7 @@
 \title{Method plot for object barp_table}
 \usage{
 \method{plot}{barp_table}(x, main = "dada2sum", pal2table, oma1 = 12,
-  ncol.leg = ceiling(nrow(x$table)/5), x.leg = -ncol(bp1$table) * 1.5,
+  ncol.leg = ceiling(nrow(x$table)/5), x.leg = -ncol(x$table) * 1.5,
   y.leg = -0.5, pt.cex = 2.5, x.int = 1)
 }
 \arguments{
