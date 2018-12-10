@@ -40,7 +40,9 @@ and absolute and relative number of OTUs/ASV per Taxon
 }
 \examples{
 
-
+bp1 <- barp.table(meio[,9:27],meio$Group,sum)
+colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
+plot(bp1,pal2table=colmeio)
 
 }
 \seealso{

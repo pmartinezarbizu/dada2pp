@@ -32,7 +32,9 @@
 #'@import graphics vegan
 #'@examples
 #' 
-#'
+#'bp1 <- barp.table(meio[,9:27],meio$Group,sum)
+#'colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
+#'plot(bp1,pal2table=colmeio)
 #'
 #'@export barp.table
 #'@seealso \code{\link{plot.barp_table}} 
@@ -92,8 +94,3 @@ legend(x.leg,y.leg,ncol=ncol.leg,legend=rownames(x_pa_tab$table),bty='n',pch=15,
 legend(x.leg,y.leg,,ncol=ncol.leg,legend=rownames(x_pa_tab$table),bty='n',pch=0,pt.cex=pt.cex, x.intersp=x.int )		
 
 }
-
-#examples
-bp1 <- barp.table(meio[,9:27],meio$Group,sum)
-colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
-plot(bp1,pal2table=colmeio)
