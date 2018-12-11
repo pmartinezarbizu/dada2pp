@@ -30,9 +30,9 @@
 stats.tt <- function(x,reads,by,cont,non_target){
 rnames <- c('total','contamination','non_target','target')
 n_taxa <- c(length(unique(by)),
-			length(cont),
-			length(non_target),
-			length(unique(by[!by %in% c(cont,non_target)]))) 
+			length(unique(by)[unique(by) %in% cont]),
+			length(unique(by)[unique(by) %in% non_target]),
+			length(unique(by)[!unique(by) %in% c(cont,non_target)])) 
 
 n_reads <- c(sum(apply(reads,MARGIN=1,FUN=sum)),
 			sum(apply(reads[by %in% cont,],MARGIN=1,FUN=sum)),
@@ -44,11 +44,12 @@ n_otus <-c(nrow(reads),
 			nrow(reads[by %in% non_target,]),
 			nrow(reads[!by %in% c(cont,non_target),]))
 
-target.taxa <- unique(by[!by %in% c(cont,non_target)])
+target.taxa <- unique(by)[!unique(by) %in% c(cont,non_target)]
 target.table <- x[by %in% target.taxa,]
 
 stats <- data.frame(n_taxa=n_taxa,n_reads=n_reads,n_otus=n_otus,row.names=rnames)
 
-return( list(stats=t(stats),cont=cont,non_target=non_target,target=target.taxa,target.table=target.table))
+return( list(stats=t(stats),cont=unique(by[by %in% cont]),non_target=unique(by[by %in% non_target]),
+target=target.taxa,target.table=target.table))
 }
 
