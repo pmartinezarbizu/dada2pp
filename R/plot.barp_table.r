@@ -36,7 +36,7 @@
 #'colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
 #'plot(bp1,pal2table=colmeio)
 #'
-#'@export barp.table
+#'@export plot.barp_table
 #'@seealso \code{\link{plot.barp_table}} 
 
 
