@@ -13,14 +13,15 @@
 #'
 #'@param (...) Any other parameter passed to adonis 
 #'
+#'
 #'@details
 #' Community ecologist want to know how species contribute to dissimilarity between groups.
 #' The routine simper() is commonly used to achive this task.
 #' But simper is limmited to decomposition of the bray-curtis dissimilarity.
 #' jackki() offers a more flexible alternative by analysing the relative contribution of each species 
-#' to observed adonis() difference (value F.Model). adonis is calculated
-#' and the resulting F value recorded by leaving on species out.
-#' The unbiased F estimate and confidence 95% intervals are used
+#' to observed adonis difference (value F.Model). adonis is calculated
+#' by leaving one species out and the resulting F value is recorded.
+#' The unbiased F estimate and 95% confidence intervals are used
 #' to classify the species into following categories
 #' \itemize{
 #' \item disgregating species: removal results in significantly lower F value
@@ -29,6 +30,7 @@
 #'}
 #' As we are only interested in F value, permutations are set to 1 by default. 
 #' Set permutations to higher value if you want to record the effect of species removal to p value. 
+#'
 #'
 #'@return An object of class jackki.
 #'
@@ -41,12 +43,18 @@
 #'@author Pedro Martinez Arbizu
 #'
 #'@import vegan 
+#'
 #'@examples
 #' 
+#' data(dune)
+#' data(dune.env)
+#' x <- jackki(dune~Management,data=dune.env)
 #'
+#' plot(x)
 #'
-#'@export barp.table
-#'@seealso \code{\link{plot.barp_table}} 
+#'@export jackki plot.jackki
+#'
+#'@seealso \code{\link{simper}} \code{\link{adonis}}
 #'
 
 
