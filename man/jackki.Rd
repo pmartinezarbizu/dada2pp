@@ -21,9 +21,9 @@ See adonis() for details. The RHS are factors that nmust be column names of a da
 \value{
 An object of class jackki.
 
-\describe{
-\item{res}{results} 
-\item{jackknife}{kckko res}
+\itemize{
+\item $res:  results 
+\item $jackknife: unbiased F estimate, unbiased variance of F and upper and lower 95% confidence intervals
 }
 }
 \description{
@@ -38,10 +38,10 @@ to observed adonis() difference (value F.Model). adonis is calculated
 and the resulting F value recorded by leaving on species out.
 The unbiased F estimate and confidence 95% intervals are used
 to classify the species into following categories
-\describe{
-\item{disgregating species}{removal results in significantly lower F value}
-\item{aggegating species}{removal results in in significantly higher F value}
-\item{n.s.}{removal does not change observed F value significantly} 
+\itemize{
+\item disgregating species: removal results in significantly lower F value
+\item aggegating species: removal results in in significantly higher F value
+\item n.s.: removal does not change observed F value significantly 
 }
 As we are only interested in F value, permutations are set to 1 by default. 
 Set permutations to higher value if you want to record the effect of species removal to p value.
