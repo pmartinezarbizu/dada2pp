@@ -35,8 +35,8 @@
 #'@return An object of class jackki.
 #'
 #' \itemize{
-#' \item $res:  results 
-#' \item $jackknife: unbiased F estimate, unbiased variance of F and upper and lower 95% confidence intervals
+#' \item res: Table showing the results of adonis when each species is excluded and the final classification
+#' \item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95% confidence intervals
   
 #'}
 #'
