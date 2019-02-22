@@ -37,8 +37,12 @@
 #' \itemize{
 #' \item res: Table showing the results of adonis when each species is excluded and the final classification
 #' \item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95\% confidence intervals
-  
 #'}
+#' The plot method displays a dotchart with the adonis F value for every excluded species.
+#' A grey solid line represents the unbiased estimate of F and to the left and rigth of it the 95\% confidence intervals.
+#' Segregating species use triangle as symbol, n.s. species a square and aggregating species a circle.
+#' Plot can be confine to segregating and aggregating species only by using reduce = TRUE. Graphical parameters can be passed to dotchart().
+ 
 #'
 #'@author Pedro Martinez Arbizu
 #'
@@ -55,7 +59,7 @@
 #'
 #'@export jackki plot.jackki
 #'
-#'@seealso \code{\link{simper}} \code{\link{adonis}}
+#'@seealso \code{\link{simper}} \code{\link{adonis}} \code{\link{dotchart}}
 #'
 
 
@@ -133,7 +137,7 @@ jackki <- function(x, data, strata = NULL, permutations=1, ... ){
 	jkup <- mean(res$F.Model) + qt(0.975,length(res$F.Model)-1)*sqrt(var(res$F.Model)/length(res$F.Model)) # upper 95% c.i.
 	jklow <- mean(res$F.Model) - qt(0.975,length(res$F.Model)-1)*sqrt(var(res$F.Model)/length(res$F.Model)) # lower 95% c.i.
 	
-	jackkniffe <- data.frame(unbiased.F=jm,unbiased.var.F=jv,'up95CI'=jkup,'low95CI'=jklow)	
+	jackknife <- data.frame(unbiased.F=jm,unbiased.var.F=jv,'up95CI'=jkup,'low95CI'=jklow)	
 
 # add some columns to results table
 	func <- rep('n.s.',length(res$F.Model))
@@ -144,7 +148,7 @@ jackki <- function(x, data, strata = NULL, permutations=1, ... ){
 	res <- cbind(res, rel.effect = func)
 	res <- res[order(res$diff.F),]
 
-res2 <- list(res=res,jackkniffe=jackkniffe)
+res2 <- list(res=res,jackknife=jackknife)
 class(res2) <- c("jackki", "list")
 return(res2)		
 }
