@@ -162,8 +162,8 @@ return(res2)
 plot.jackki <- function(x, reduce = FALSE, pch=rev(c(21,22,24)[x$res$rel.effect]), pt.cex=1.3, bg='white',  ... ){
 
 
-xmin <-  min( c(x$res$F.Model,x$jackkniffe$low95CI))
-xmax <- max( c(x$res$F.Model,x$jackkniffe$up95CI))
+xmin <-  min( c(x$res$F.Model,x$jackknife$low95CI))
+xmax <- max( c(x$res$F.Model,x$jackknife$up95CI))
 
 if(reduce){x$res <-  x$res[!(x$res$rel.effect == 'n.s.'),] }
 
@@ -175,10 +175,11 @@ dotchart(x$res$F.Model,1:nrow(x$res),
 		bg=bg,
 		... )
 
-abline(v=x$jackkniffe[1],lty=1,lwd=4,col=rgb(20,20,100,alpha=50,max=255)) 
-abline(v=c(x$jackkniffe[3],x$jackkniffe[4]),lty=2,col=rgb(20,20,100,alpha=50,max=255))
+abline(v=x$jackknife[1],lty=1,lwd=4,col=rgb(20,20,100,alpha=50,max=255)) 
+abline(v=c(x$jackknife[3],x$jackknife[4]),lty=2,col=rgb(20,20,100,alpha=50,max=255))
 
 }
+
 
 
 
