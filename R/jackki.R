@@ -38,6 +38,7 @@
 #' \item res: Table showing the results of adonis when each species is excluded and the final classification
 #' \item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95\% confidence intervals
 #'}
+#'
 #' The plot method displays a dotchart with the adonis F value for every excluded species.
 #' A grey solid line represents the unbiased estimate of F and to the left and rigth of it the 95\% confidence intervals.
 #' Segregating species use triangle as symbol, n.s. species a square and aggregating species a circle.
