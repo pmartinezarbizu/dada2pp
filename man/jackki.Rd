@@ -22,14 +22,16 @@ See adonis() for details. The RHS are factors that must be column names of a dat
 An object of class jackki.
 
 \itemize{
-\item res: Table showing the results of adonis when each species is excluded and the final classification
-\item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95\% confidence intervals
+\item res: Table showing the results of adonis for each excluded species its final classification.
+\item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95\% confidence intervals.
 }
 
 The plot method displays a dotchart with the adonis F value for every excluded species.
-A grey solid line represents the unbiased estimate of F and to the left and rigth of it the 95\% confidence intervals.
+A grey solid line represents the unbiased estimate of F and a dotted line to the left and to the rigth of it
+the 95\% confidence intervals.
 Segregating species use triangle as symbol, n.s. species a square and aggregating species a circle.
-Plot can be confine to segregating and aggregating species only by using reduce = TRUE. Graphical parameters can be passed to dotchart().
+Plot can be confined to segregating and aggregating species only by using reduce = TRUE.
+Graphical parameters can be passed to dotchart().
 }
 \description{
 Calculates the relative importance of variables using jackknife
