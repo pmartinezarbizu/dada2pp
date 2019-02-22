@@ -8,9 +8,9 @@ jackki(x, data, strata = NULL, permutations = 1, ...)
 }
 \arguments{
 \item{x}{Model formula. The LHS is either community matrix or dissimilarity matrix (eg. from vegdist or dist)
-See adonis() for details. The RHS are factors that nmust be column names of a data.frame specified with argument data.}
+See adonis() for details. The RHS are factors that must be column names of a data frame specified with argument data.}
 
-\item{data}{The data frame of independent varibles having as column names the factors specified in formula.}
+\item{data}{The data frame of independent variables having as column names the factors specified in formula.}
 
 \item{strata}{String. The name of the column with factors to be used as strata.}
 
@@ -27,7 +27,7 @@ An object of class jackki.
 }
 }
 \description{
-Calculates the relative importance of varibles using jackknife
+Calculates the relative importance of variables using jackknife
 }
 \details{
 Community ecologist want to know how species contribute to dissimilarity between groups.
@@ -35,12 +35,12 @@ The routine simper() is commonly used to achive this task.
 But simper is limmited to decomposition of the bray-curtis dissimilarity.
 jackki() offers a more flexible alternative by analysing the relative contribution of each species 
 to observed adonis difference (value F.Model). adonis is calculated
-by leaving one species out and the resulting F value is recorded.
+by leaving out one species each time and the resulting F value is recorded.
 The unbiased F estimate and 95% confidence intervals are used
 to classify the species into following categories
 \itemize{
-\item disgregating species: removal results in significantly lower F value
-\item aggegating species: removal results in in significantly higher F value
+\item segregating species: removal results in significantly lower F value
+\item aggregating species: removal results in significantly higher F value
 \item n.s.: removal does not change observed F value significantly 
 }
 As we are only interested in F value, permutations are set to 1 by default. 
@@ -48,6 +48,7 @@ Set permutations to higher value if you want to record the effect of species rem
 }
 \examples{
 
+library(vegan)
 data(dune)
 data(dune.env)
 x <- jackki(dune~Management,data=dune.env)
