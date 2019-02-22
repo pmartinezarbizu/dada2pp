@@ -21,7 +21,7 @@
 #' jackki() offers a more flexible alternative by analysing the relative contribution of each species 
 #' to observed adonis difference (value F.Model). adonis is calculated
 #' by leaving out one species each time and the resulting F value is recorded.
-#' The unbiased F estimate and 95% confidence intervals are used
+#' The unbiased F estimate and 95\% confidence intervals are used
 #' to classify the species into following categories
 #' \itemize{
 #' \item segregating species: removal results in significantly lower F value
@@ -36,7 +36,7 @@
 #'
 #' \itemize{
 #' \item res: Table showing the results of adonis when each species is excluded and the final classification
-#' \item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95% confidence intervals
+#' \item jackknife: unbiased F estimate, unbiased variance of F, upper and lower 95\% confidence intervals
   
 #'}
 #'
