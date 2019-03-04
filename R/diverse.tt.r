@@ -22,10 +22,10 @@
 #' 
 #'
 #'
-#'@export divers.tt
-#'@seealso \code{\link{plot.divers_tt}} 
+#'@export diverse.tt
+#'@seealso \code{\link{plot.diverse_tt}} 
 
-divers.tt <- function(x,by,sample=min(N)*0.8,pal){
+diverse.tt <- function(x,by,sample=min(N)*0.8,pal){
 
 #Number of individuals
 	N <- apply(x,FUN=sum,MARGIN=1)
@@ -44,7 +44,7 @@ divers.tt <- function(x,by,sample=min(N)*0.8,pal){
 	pch2 <- match2table(by,pal,'pch2')
 	
 res <- data.frame(area=by,N,S,H,J,ES,col=col,pch=pch,pch2=pch2)
-class(res) <- c("divers_tt", "data.frame")
+class(res) <- c("diverse_tt", "data.frame")
 return(res)
 }
 

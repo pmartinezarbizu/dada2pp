@@ -16,10 +16,10 @@
 #' 
 #'
 #'
-#'@export plot.divers_tt
-#'@seealso \code{\link{plot.divers_tt}} 
+#'@export plot.diverse_tt
+#'@seealso \code{\link{plot.diverse_tt}} 
 
-plot.divers_tt <- function(x,ty='ASVs'){
+plot.diverse_tt <- function(x,ty='ASVs'){
 if(!(ty %in% c('ASVs','OTUs'))) {error("ty must be either \'ASVs\' or \'OTUs\'\n ")}
 		
 #typemain <- ifelse(ty=='ASVs','ASVs','OTUs')
