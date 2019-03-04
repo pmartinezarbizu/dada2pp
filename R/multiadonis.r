@@ -1,5 +1,28 @@
-
-datasets <- list('meio'=meio,'crust'=crust,'NeHaCyMi'=NeHaCyMi, 'worms'=worms)
+#'@title Multiple Adonis Test for Taxon Table 
+#'
+#'@description  
+#'
+#'@param datasets a list of datasets
+#'
+#'@param fac factor for adonis (groups)
+#'
+#'@details
+#' 
+#'@return A dataframe with results of adonis
+#'
+#'
+#'@author Pedro Martinez Arbizu
+#'
+#'@import vegan 
+#'
+#'@examples
+#' datasets <- list('meio'=meio[,9:27],'crust'=crust[,9:27],'NeHaCyMi'=NeHaCyMi[,9:27], 'worms'=worms[,9:27])
+#' multiadonis(datasets,area)
+#' 
+#'
+#'
+#'@export multiadonis
+#'@seealso \code{\link{adonis}} 
 
 multiadonis <- function(datasets, fac, ...   ){
 
@@ -42,6 +65,4 @@ res <- data.frame(names,ad.F = round(ad.F,2),ad.p= ad.p,bd.F=round(bd.F,2),
 return(data.frame(res))
 }
 
-#example:
-datasets <- list('meio'=meio[,9:27],'crust'=crust[,9:27],'NeHaCyMi'=NeHaCyMi[,9:27], 'worms'=worms[,9:27])
-multiadonis(datasets,area)
+
