@@ -26,7 +26,7 @@
 countTaxa <- function(x,taxa,fac, ... ){
 total <-  table(taxa)
 
-by_fac <- aggregate(t(x),list(area),sum)
+by_fac <- aggregate(t(x),list(fac),sum)
 by_fac_pa <- decostand(by_fac[-1],method='pa')
 shared <- apply(by_fac_pa,MARGIN=2,FUN=sum)
 
