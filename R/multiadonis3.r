@@ -26,12 +26,11 @@
 #'@examples
 #' datasets <- list('meio'= t(meio[,9:27]),'crust'= t(crust[,9:27]),'NeHaCyMi'= t(NeHaCyMi[,9:27]))
 #' multiadonis(datasets,area,nboot=10,frac=0.5)
-#' 
+#' multiadonis(list('ir'=irc),fac=fac,loghell=TRUE,rarefy=FALSE,frac=1,nboot=1,balance=TRUE
 #'
 #'
 #'@export multiadonis
 #'@seealso \code{\link{adonis}} 
-multiadonis(list('ir'=irc),fac=fac,loghell=TRUE,rarefy=FALSE,frac=1,nboot=1,balance=TRUE
 
 multiadonis <- function(datasets, fac, nboot = 1, rarefy=TRUE, frac = 0.5, balance = FALSE, loghell = TRUE, distance= 'euclidean', ...   ){
 
