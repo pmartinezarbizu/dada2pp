@@ -19,8 +19,9 @@
 #' 
 #'
 #'
+#'
 #'@export countTaxa
-#'@seealso \code{\link{barp_table}} 
+#'@seealso \code{\link{barp.table}} 
 
 
 countTaxa <- function(x,taxa,fac, ... ){
