@@ -21,120 +21,111 @@
 #'
 #'@author Pedro Martinez Arbizu
 #'
-#'@import vegan 
+#'@import vegan splitstackshape
 #'
 #'@examples
 #' datasets <- list('meio'= t(meio[,9:27]),'crust'= t(crust[,9:27]),'NeHaCyMi'= t(NeHaCyMi[,9:27]))
 #' multiadonis(datasets,area,nboot=10,frac=0.5)
-#' 
+#' multiadonis(list('ir'=irc),fac=fac,loghell=TRUE,rarefy=FALSE,frac=1,nboot=1,balance=TRUE
 #'
 #'
 #'@export multiadonis
 #'@seealso \code{\link{adonis}} 
 
-multiadonis <- function(datasets, fac, nboot = 1, frac = 0.3, ...   ){
+multiadonis <- function(datasets, fac, nboot = 1, rarefy=TRUE, frac = 0.5, balance = FALSE, loghell = TRUE, distance= 'euclidean', ...   ){
 
 ##adonis permanova table
 names <- names(datasets)
 ad.F <- c()
 ad.p <- c()
-rar.ad.F <- c()
-rar.ad.p <- c()
 
 bd.F <- c()
 bd.p <- c()
-rar.bd.F <- c()
-rar.bd.p <- c()
 
 adpa.F <- c()
 adpa.p <- c()
-rar.adpa.F <- c()
-rar.adpa.p <- c()
-
 
 bdpa.F <- c()
 bdpa.p <- c()
-rar.bdpa.F <- c()
-rar.bdpa.p <- c()
 
+res <- data.frame()
 
 for (i in 1:length(datasets)){
-
 dat <- datasets[[i]]
-dat2 <- dat[!(apply(dat,sum,MARGIN=1)==0),]
-dat2 <- decostand(log(dat2+1),method='hellinger')
 
-ad <- adonis(dat2 ~ fac[!(apply(dat,sum,MARGIN=1)==0) ], ... )
-ad.F <- c(ad.F,ad$aov.tab[1,4])
-ad.p <- c(ad.p,ad$aov.tab[1,6])
-bd <- permutest(betadisper(vegdist(dat2),fac[!(apply(dat,sum,MARGIN=1)==0) ]))
-bd.F <- c(bd.F,bd[[1]][1,4])
-bd.p <- c(bd.p,bd[[1]][1,6])
+#remove factors having 0 observations
+fac_dat <- fac[!(apply(dat,sum,MARGIN=2)==0)]
 
-#now pa
-datpa <- decostand(dat2,'pa')
-ad <- adonis(datpa ~ fac[!(apply(dat,sum,MARGIN=1)==0) ],distance='euclidean', ... )
-adpa.F <- c(adpa.F,ad$aov.tab[1,4])
-adpa.p <- c(adpa.p,ad$aov.tab[1,6])
-bd <- permutest(betadisper(vegdist(datpa,'euclidean'),fac[!(apply(dat,sum,MARGIN=1)==0) ]))
-bdpa.F <- c(bdpa.F,bd[[1]][1,4])
-bdpa.p <- c(bdpa.p,bd[[1]][1,6])
+#minimum count per factor
+minfac <- min(table(fac_dat))
 
+#remove samples having 0 observations
+dat2 <- dat[,!(apply(dat,sum,MARGIN=2)==0)]
+
+# number of reads per sample
+sumreads <- apply(dat2,MARGIN=2,FUN=sum)
+
+#for bootstrap here
+
+for(i in 1:nboot){   
+#remove factors having 0 observations
+fac_dat <- fac[!(apply(dat,sum,MARGIN=2)==0)]
+###################
+
+drar <- dat2
+
+if(rarefy == TRUE){
 ##rarefy communitiy
-if(nboot>1){
 drar <- c()
-sumreads <- apply(dat,MARGIN=1,FUN=sum)
 sample <- ceiling(min(sumreads[sumreads>0])*frac)
 if(sample == 1){
 sample <- min(sumreads[sumreads>0])
 }
+##rarefy
+drar <- rrarefy(t(dat2),sample)
+drar <- t(drar)}
+##################
 
-for(i in 1:nboot){
-drar <- rbind(drar, rrarefy(dat,sample))
- }
-fac2 <- rep(fac,nboot)
- 
-rar.dat2 <- drar[!(apply(drar,sum,MARGIN=1)==0),]
-rar.dat2 <- decostand(log(rar.dat2+1),method='hellinger')
 
-rar.ad <- adonis(rar.dat2 ~ fac2[!(apply(drar,sum,MARGIN=1)==0)], ... )
-rar.ad.F <- c(rar.ad.F,rar.ad$aov.tab[1,4])
-rar.ad.p <- c(rar.ad.p,rar.ad$aov.tab[1,6])
-rar.bd <- permutest(betadisper(vegdist(rar.dat2),fac2[!(apply(drar,sum,MARGIN=1)==0) ]))
-rar.bd.F <- c(rar.bd.F,rar.bd[[1]][1,4])
-rar.bd.p <- c(rar.bd.p,rar.bd[[1]][1,6])
+
+##################
+##balance community
+if(balance==TRUE){
+#minfac <- min(table(fac_dat))
+datbal <-  stratified(data.frame(fac_dat,t(drar)),'fac_dat',minfac)
+fac_dat <-as.character(datbal$fac_dat)
+drar <- t(datbal[,-1])
+}
+###################
+
+###################
+#transform loghell
+if (loghell==TRUE){
+drar <- decostand(log(drar+1),MARGIN= 2,method='hellinger')
+}
+###################
+
+#calculate adonis and betadisper
+ad <- adonis(t(drar) ~ fac_dat, distance=distance )
+ad.F <- c(ad.F,ad$aov.tab[1,4])
+ad.p <- c(ad.p,ad$aov.tab[1,6])
+bd <- permutest(betadisper(dist(t(drar)),fac_dat))
+bd.F <- c(bd.F,bd[[1]][1,4])
+bd.p <- c(bd.p,bd[[1]][1,6])
+
 
 #now pa
-rar.datpa <- decostand(rar.dat2,'pa')
-rar.ad <- adonis(rar.datpa ~ fac2[!(apply(drar,sum,MARGIN=1)==0) ],distance='euclidean', ... )
-rar.adpa.F <- c(rar.adpa.F,rar.ad$aov.tab[1,4])
-rar.adpa.p <- c(rar.adpa.p,rar.ad$aov.tab[1,6])
-rar.bd <- permutest(betadisper(vegdist(rar.datpa,'euclidean'),fac2[!(apply(drar,sum,MARGIN=1)==0) ]))
-rar.bdpa.F <- c(rar.bdpa.F,rar.bd[[1]][1,4])
-rar.bdpa.p <- c(rar.bdpa.p,rar.bd[[1]][1,6])
-} #end if clause
+datpa <- decostand(drar,'pa')
+ad <- adonis(t(datpa) ~ fac_dat,distance=distance )
+adpa.F <- c(adpa.F,ad$aov.tab[1,4])
+adpa.p <- c(adpa.p,ad$aov.tab[1,6])
+bdpa <- permutest(betadisper(dist(t(datpa)),fac_dat))
+bdpa.F <- c(bdpa.F,bdpa[[1]][1,4])
+bdpa.p <- c(bdpa.p,bdpa[[1]][1,6])
 
 } #end for clause
+}
 
-if(nboot>1){
-res <- data.frame(names,
-ad.F = round(ad.F,2),
-ad.p,
-rar.ad.F = round(rar.ad.F,2),
-rar.ad.p= rar.ad.p,
-bd.F=round(bd.F,2),
-bd.p = bd.p,
-rar.bd.F=round(rar.bd.F,2),
-rar.bd.p,
-adpa.F=round(adpa.F,2),
-adpa.p,
-rar.adpa.F=round(rar.adpa.F,2),
-rar.adpa.p,
-bdpa.F=round(bdpa.F,2),
-bdpa.p,
-rar.bdpa.F=round(bdpa.F,2),
-rar.bdpa.p)
-}else{
 res <- data.frame(names,
 ad.F = round(ad.F,2),
 ad.p,
@@ -144,9 +135,12 @@ adpa.F=round(adpa.F,2),
 adpa.p,
 bdpa.F=round(bdpa.F,2),
 bdpa.p)
-}
 
-return(data.frame(res))
+if(nboot > 1){
+f1 <- function(x) c(Mean = mean(x), SD = sd(x))
+res <- do.call(data.frame, aggregate(. ~ names, res, f1))
 }
-
+res[-1] <- round(res[-1],3) 
+return(data.frame(res[order(res$names),]))
+}
 
