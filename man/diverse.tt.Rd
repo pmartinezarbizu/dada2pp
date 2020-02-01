@@ -24,7 +24,7 @@ Calculate miscelaneous diversity values
 }
 \details{
 Returns parameters N= number of specimens, S= number of species,
-H= Shannon index, J= Pielou´s evenness and ES= estimented number od species for N =sample
+H= Shannon index, J= Pielou\´s evenness and ES= estimented number od species for N =sample
 }
 \examples{
 
