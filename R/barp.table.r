@@ -1,6 +1,6 @@
 #'@title Barplot Table  
 #'
-#'@description Creates a table that be be used for a barplot graph 
+#'@description Creates a table that can be used for a barplot graph 
 #'
 #'@param x The community table with Taxon reads counts
 #'

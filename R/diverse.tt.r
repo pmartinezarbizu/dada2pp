@@ -1,18 +1,20 @@
 #'@title Diversity Values Based on Taxon Table 
 #'
-#'@description  
+#'@description Calculate miscelaneous diversity values 
 #'
-#'@param x
+#'@param x community table
 #'
-#'@param by 
+#'@param by aggregating vector
 #'
-#'@param sample
+#'@param sample number of n for rarefaction (default is min(N)*0.8)
 #' 
-#'@param pal
+#'@param pal Palette object from pal2table
 #'
-#'@details
+#'@details Returns parameters N= number of specimens, S= number of species,
+#' H= Shannon index, J= Pielou´s evenness and ES= estimented number od species for N =sample
 #' 
 #'@return An object of class divers_tt
+#' This object has a plot method
 #'
 #'
 #'@author Pedro Martinez Arbizu

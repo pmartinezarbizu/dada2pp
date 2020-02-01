@@ -18,10 +18,10 @@
 #'
 #'@param pt.cex Size of symbol in legend
 #'
-#'@param x.int Valeue passd to x.intersp (see ?legend )
+#'@param x.int Value passed to x.intersp (see ?legend )
 #'
 #'@details
-#' This takes a table created by barp.table and creates 4 barplots
+#' This function takes a table created by barp.table and creates 4 barplots
 #' whith absolute and relative number of reads
 #' and absolute and relative number of OTUs/ASV per Taxon
 #'

@@ -1,6 +1,7 @@
 #'@title Plots pal2table object  
 #'
-#'@description Plots symbols, colors and the corresponding factor labels of a pal2table object.
+#'@description Plots symbols, colors and the corresponding factor labels
+#' of a pal2table object.
 #'
 #'@param x An object created with pal2table
 #' 

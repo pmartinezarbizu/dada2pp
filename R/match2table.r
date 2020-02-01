@@ -1,4 +1,4 @@
-#'@title Match Colors to Factors in a Table  
+#'@title Match Colors to Factors in a pal2table object  
 #'
 #'@description Creates a vector fo colors or symbols matching the factors in a table created by pal2table 
 #'
