@@ -2,7 +2,7 @@
 % Please edit documentation in R/match2table.r
 \name{match2table}
 \alias{match2table}
-\title{Match Colors to Factors in a Table}
+\title{Match Colors to Factors in a pal2table object}
 \usage{
 match2table(x, table, obj = c("col", "pch", "pch2"))
 }

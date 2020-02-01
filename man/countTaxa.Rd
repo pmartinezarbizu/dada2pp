@@ -27,9 +27,10 @@ countTaxa(meio[,9:27],meio$Group,area)
 
 
 
+
 }
 \seealso{
-\code{\link{barp_table}}
+\code{\link{barp.table}}
 }
 \author{
 Pedro Martinez Arbizu

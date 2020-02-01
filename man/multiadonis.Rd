@@ -4,7 +4,17 @@
 \alias{multiadonis}
 \title{Multiple Adonis Test for Taxon Table}
 \usage{
-multiadonis(datasets, fac, nboot = 1, frac = 0.3, ...)
+multiadonis(
+  datasets,
+  fac,
+  nboot = 1,
+  rarefy = TRUE,
+  frac = 0.5,
+  balance = FALSE,
+  loghell = TRUE,
+  distance = "euclidean",
+  ...
+)
 }
 \arguments{
 \item{datasets}{a list of datasets}
@@ -29,7 +39,7 @@ A dataframe with results of adonis and results of adonis on rarefied dataset
 \examples{
 datasets <- list('meio'= t(meio[,9:27]),'crust'= t(crust[,9:27]),'NeHaCyMi'= t(NeHaCyMi[,9:27]))
 multiadonis(datasets,area,nboot=10,frac=0.5)
-
+multiadonis(list('ir'=irc),fac=fac,loghell=TRUE,rarefy=FALSE,frac=1,nboot=1,balance=TRUE
 
 
 }

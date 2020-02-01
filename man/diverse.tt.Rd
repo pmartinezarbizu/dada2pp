@@ -7,22 +7,24 @@
 diverse.tt(x, by, sample = min(N) * 0.8, pal)
 }
 \arguments{
-\item{x}{}
+\item{x}{community table}
 
-\item{by}{}
+\item{by}{aggregating vector}
 
-\item{sample}{}
+\item{sample}{number of n for rarefaction (default is min(N)*0.8)}
 
-\item{pal}{}
+\item{pal}{Palette object from pal2table}
 }
 \value{
 An object of class divers_tt
+This object has a plot method
 }
 \description{
-
+Calculate miscelaneous diversity values
 }
 \details{
-
+Returns parameters N= number of specimens, S= number of species,
+H= Shannon index, J= Pielou´s evenness and ES= estimented number od species for N =sample
 }
 \examples{
 

@@ -21,7 +21,7 @@ For absolute and relative number of reads
 and absolute and relative number of OTUs/ASV per Taxon
 }
 \description{
-Creates a table that be be used for a barplot graph
+Creates a table that can be used for a barplot graph
 }
 \details{
 This is a wrapper function to 'aggregate' and 'apply'.

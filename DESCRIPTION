@@ -3,7 +3,7 @@ Title: Miscelaneous Functions for Post-Processing dada2 Results.
 Version: 0.0.1
 Date: 2018-12-02
 Authors@R: person("Pedro", "Martinez Arbizu", email = "pmartinez@senckenberg.de", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Useful functions to analyse and plot metabarcoding data.
 URL: https://github.com/pmartinezarbizu/dada2pp
 Maintainer: Pedro Martínez Arbizu <pmartinez@senckenberg.de>
 Depends: R (>= 3.1.0)
@@ -11,7 +11,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: graphics 
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests: 
     knitr,
     rmarkdown

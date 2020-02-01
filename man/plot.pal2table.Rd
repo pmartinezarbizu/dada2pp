@@ -10,7 +10,8 @@
 \item{x}{An object created with pal2table}
 }
 \description{
-Plots symbols, colors and the corresponding factor labels of a pal2table object.
+Plots symbols, colors and the corresponding factor labels
+of a pal2table object.
 }
 \examples{
 data(iris)

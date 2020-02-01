@@ -4,9 +4,17 @@
 \alias{plot.barp_table}
 \title{Method plot for object barp_table}
 \usage{
-\method{plot}{barp_table}(x, main = "dada2sum", pal2table, oma1 = 12,
-  ncol.leg = ceiling(nrow(x$table)/5), x.leg = -ncol(x$table) * 1.5,
-  y.leg = -0.5, pt.cex = 2.5, x.int = 1)
+\method{plot}{barp_table}(
+  x,
+  main = "dada2sum",
+  pal2table,
+  oma1 = 12,
+  ncol.leg = ceiling(nrow(x$table)/5),
+  x.leg = -ncol(x$table) * 1.5,
+  y.leg = -0.5,
+  pt.cex = 2.5,
+  x.int = 1
+)
 }
 \arguments{
 \item{x}{Object of class barp_table}
@@ -25,7 +33,7 @@
 
 \item{pt.cex}{Size of symbol in legend}
 
-\item{x.int}{Valeue passd to x.intersp (see ?legend )}
+\item{x.int}{Value passed to x.intersp (see ?legend )}
 }
 \value{
 A graph with 4 barplots
@@ -34,7 +42,7 @@ A graph with 4 barplots
 Plots 4 barplots in one page using a barp_table object as input
 }
 \details{
-This takes a table created by barp.table and creates 4 barplots
+This function takes a table created by barp.table and creates 4 barplots
 whith absolute and relative number of reads
 and absolute and relative number of OTUs/ASV per Taxon
 }

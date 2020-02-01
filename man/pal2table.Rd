@@ -4,8 +4,7 @@
 \alias{pal2table}
 \title{Color Palette to Table}
 \usage{
-pal2table(x, pch = 21:24, pch2 = c(19, 15, 18, 17), alpha = 220,
-  pal = "bro2")
+pal2table(x, pch = 21:24, pch2 = c(19, 15, 18, 17), alpha = 220, pal = "bro2")
 }
 \arguments{
 \item{x}{A vector of factors}
