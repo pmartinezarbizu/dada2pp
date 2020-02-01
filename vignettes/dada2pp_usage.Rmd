@@ -38,6 +38,28 @@ load library
 library(dada2pp)
 ```
 
+load the example dataset deepMeio.
+This dataset contains the result of metabarcoding of deep-sea meiofauna.
+ The dada2 AVS were blasted against GenBank and some columns were added.
+ The number of reads on 19 stations is recorded on colums. Each line represents one ASV.
+
+```{r}
+data(deepMeio)
+``` 
+
+Inspect the dataset. 
+```{r}
+summary(deepMeio)
+```
+
+Column `Group` contains the higher taxon assigment for the AVS. How many are there?
+```{r}
+unique(deepMeio$Group)
+```
+
+
+
+
 ## Create a color palette
 The function `pal2table()` created a matching table of taxa to colors and symbols, so that you can
 assign same colors and symbols to your taxa consistently in all your graphs. 
