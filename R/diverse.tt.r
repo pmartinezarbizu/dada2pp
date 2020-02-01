@@ -11,7 +11,7 @@
 #'@param pal Palette object from pal2table
 #'
 #'@details Returns parameters N= number of specimens, S= number of species,
-#' H= Shannon index, J= Pielou\'s evenness and ES= estimated number od species for N =sample
+#' H= Shannon index, J= Pielou's evenness and ES= estimated number od species for N =sample
 #' 
 #'@return An object of class divers_tt
 #' This object has a plot method
