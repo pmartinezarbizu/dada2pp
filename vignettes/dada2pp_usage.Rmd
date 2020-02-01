@@ -1,10 +1,10 @@
 ---
-title: "How to use dada2pp"
+title: "First steps with dada2pp"
 author: "Pedro Martinez Arbizu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{First steps with dada2pp}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,12 +15,55 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+# Working with dada2pp
+by *Pedro Martinez Arbizu*
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+## Starting point
+You have analysed your metabarcoding results with dada2 (or other pipeline) and produced a
+ *community table*. This means you have ASVs (or OTUs) as lines and localities as columns.
+
+## Getting ready
+install library from Github
+
+*Windows users need Rtools installed to use devtools*
+```{r,eval = FALSE}
+library(devtools)
+install_github("pmartinezarbizu/dada2pp")
+```
+
+
+load library
+```{r}
+library(dada2pp)
+```
+
+## Create a color palette
+The function `pal2table()` created a matching table of taxa to colors and symbols, so that you can
+assign same colors and symbols to your taxa consistently in all your graphs. 
+```{r}
+data(iris)
+library(dada2pp)
+iriscol <- pal2table(unique(iris$Species))
+```
+inspect the created object:
+```{r}
+iriscol
+```
+View the assigend colors and sysmbols:
+```{r, fig.show='hold'}
+plot(iriscol)
+```
+
+
 
 - Never uses retina figures
 - Has a smaller default figure size
 - Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(iriscol)
+```
 
 ## Vignette Info
 
