@@ -25,8 +25,8 @@ if(!(ty %in% c('ASVs','OTUs'))) {error("ty must be either \'ASVs\' or \'OTUs\'\n
 #typemain <- ifelse(ty=='ASVs','ASVs','OTUs')
 
 par(mfrow=c(2,2),xpd=NA)
-boxplot(x$N~x$area,col=as.vector(unique(x$col)),main='Number of reads per sample')
-boxplot(x$S~x$area,col=as.vector(unique(x$col)),main=paste('Number of',ty, 'per sample'))
-boxplot(x$J~x$area,col=as.vector(unique(x$col)),main='Evenness per sample')
-boxplot(x$ES~x$area,col=as.vector(unique(x$col)),main=paste('Expected',ty, 'per sample'))
+boxplot(x$N~x$area,col=as.vector(unique(x$col)),main='Number of reads per sample',xlab='',ylab='')
+boxplot(x$S~x$area,col=as.vector(unique(x$col)),main=paste('Number of',ty, 'per sample'),xlab='',ylab='')
+boxplot(x$J~x$area,col=as.vector(unique(x$col)),main='Evenness per sample',xlab='',ylab='')
+boxplot(x$ES~x$area,col=as.vector(unique(x$col)),main=paste('Expected',ty, 'per sample'),xlab='',ylab='')
 }

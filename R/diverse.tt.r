@@ -30,16 +30,16 @@
 diverse.tt <- function(x,by,sample=min(N)*0.8,pal){
 
 #Number of individuals
-	N <- apply(x,FUN=sum,MARGIN=1)
+	N <- apply(x,FUN=sum,MARGIN=2)
 #Shannon
-	H <- diversity(x)
+	H <- diversity(t(x))
 # Species richness (S)
-	S <- specnumber(x) 
+	S <- specnumber(t(x)) 
 # Pielou's evenness
 	J <- H/log(S)
 # Rarefaction
 	sample <- sample 	
-	ES <- rarefy(x,sample)
+	ES <- rarefy(t(x),sample)
 # colors
 	col <- match2table(by,pal,'col')
 	pch <- match2table(by,pal,'pch')

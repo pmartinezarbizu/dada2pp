@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 # Working with dada2pp
 by *Pedro Martinez Arbizu*
 
+> "This tutorial should be present
+<a href="https://github.com/pmartinezarbizu/dada2pp/wiki" target="_blank">here</a>"
+
+
 
 ## Starting point
 You have analysed your metabarcoding results with dada2 (or other pipeline) and produced a
@@ -38,10 +42,11 @@ load library
 library(dada2pp)
 ```
 
-load the example dataset deepMeio.
+Load the example dataset `deepMeio`.
 This dataset contains the result of metabarcoding of deep-sea meiofauna.
- The dada2 AVS were blasted against GenBank and some columns were added.
- The number of reads on 19 stations is recorded on colums. Each line represents one ASV.
+The amplified fragment was V1V2 from 18s. The dada2 AVS were blasted against GenBank and
+ some columns with statistic results were added (columns 1:8).
+ The number of reads on 19 stations is recorded on colums 9:27. Each line represents one ASV.
 
 ```{r}
 data(deepMeio)
@@ -52,79 +57,239 @@ Inspect the dataset.
 summary(deepMeio)
 ```
 
-Column `Group` contains the higher taxon assigment for the AVS. How many are there?
+Before you move on, it would be useful to declare some information on `gene` (fragment studied),
+`pip` (pipeline used) and `pr` (project name). This will help to consistent names for files and graphs.
+
+```{r}
+gene <- 'V1V2'
+pip <- 'dada2'
+pr <- 'DeepMeio' 
+```
+## Filter some ASVs
+Produce a graph of frament lengths
+
+```{r, fig.show='hold'}
+mode <- as.integer(names(which(table(deepMeio$length)==max(table(deepMeio$length)))))
+counts <- max(table(deepMeio$length))
+plot(table(deepMeio$length),ylab='number of  ASVs',xlab='read length')
+text(mode,counts,labels=paste (mode, 'bp'),pos = 4)
+```
+
+Apply filters if needed:
+- 1.) remove ASVs shorter than (for instance) 300bp
+```{r}
+deepMeio <- deepMeio[deepMeio$length>=300,]
+```
+Other filter could be to remove ASV with query coverage `qcovs` is lower than (for instance) 90%.
+Try this:
+```{r,eval=FALSE}
+plot(table(deepMeio$qcovs))
+deepMeio <- deepMeio[deepMeio$qcovs>=90,]
+```	
+	
+
+- 2.) remove samples with very low number of reads if needed.
+
+	First inspect number of reads per sample:
+
+```{r}
+apply(deepMeio[,9:27],FUN=sum,MARGIN=2)
+```
+As there is no sample with extrem low number of reads we keep all.
+
+Otherwise, to remove (for instance) sample loc1_2:
+```{r, eval = FALSE}
+deepMeio <- deepMeio[,-which(names(deepMeio) == 'loc1_2')]
+```
+
+After applying all filters, check if any higher taxon group was left with 0 ASVs:
+```{r}
+table(deepMeio$Group)
+```
+This is not the case here. Otherwise remove the groups with 0 ASVs.
+To remove for instance group `mesozoans` (if it would have 0 ASVs):
+
+```{r,eval=FALSE}
+deepMeio <- deepMeio[-which(deepMeio$Group == 'mesozoans'),]
+```
+
+And then drop the level `mesozoans` from `Group`:
+
+```{r}
+deepMeio$Group <- droplevels(deepMeio$Group)
+```
+ 
+
+
+## Clean up Genbank inconsistent classification
+
+Column `Group` contains the higher taxon assigment for the AVS. How many are different groups are there?
 ```{r}
 unique(deepMeio$Group)
 ```
+At first glace we discover 3 inconsistecies:
 
+- There is a group `crustaceans` but also a separate group `isopods` which are obviously also crustaceans.
+- There is a separate group `animals`
+- There is a separate group `eukaryotes`
+
+Assign the isopods to the group `crustaceans`:
+```{r}
+deepMeio[deepMeio$Group == 'isopods', 'Group'] <- 'crustaceans'
+```
+Inspect which taxa are in the group `animals`:
+```{r}
+unique(deepMeio[deepMeio$Group == 'animals', 'Species'])
+```
+Surprisingly *Haplogonaria*, *Ascoparia*, *Nemertoderma* and *Proporus* are all `flatworms`.
+
+Move these ASVs to `flatworms`:
+```{r}
+deepMeio[deepMeio$Species %in% c( "Haplogonaria_sp._'schillingi'_UJ2011",
+ "Ascoparia_sp._UJ2011", "Nemertoderma_sp._SMNHUJ13330", "Proporus_brochii"), 'Group'] <- 'flatworms'
+```
+check results with these two commands:
+```{r, eval = FALSE}
+unique(deepMeio[deepMeio$Group == 'animals', 'Species'])
+unique(deepMeio[deepMeio$Group == 'flatworms', 'Species'])
+```
+
+Inspect which taxa are in the group `eukaryotes`:
+```{r}
+unique(deepMeio[deepMeio$Group == 'eukaryotes', 'Species'])
+```
+As none of the taxa is metazoan meiofauna we leave the group `eukaryotes` as it is.
+
+
+## Define your target group
+Our study focus on free-living metazoan meiofauna. From the remaining groups there are some of them
+ which could be defined as contamination, others are benthic deep-sea organisms but not our
+ target metazoan meiofauna and only some groups are what we are looking for.
+ We define 3 groups `contamination`, `non_target` and `target`:
+
+```{r}
+contamination <- c('animals', 'eukaryotes', 'dinoflagellates', 'ascomycetes','golden_algae') 
+
+non_target <- c('cercozoans', 'hemichordates', 'hydrozoans', 'bryozoans', 'protozoa', 'mesozoans',
+'sea_cucumbers', 'tunicates', 'tusk_shells', 'solenogasters')
+
+target <- c('segmented_worms', 'crustaceans', 'ribbon_worms', 'nematodes', 'bivalves',
+'flatworms', 'gastrotrichs', 'gastropods', 'loriciferans', 'spoonworms')
+```
+
+Use the function `stats.tt` to inspect your results and reduce your dataset to target taxa.
+- x: your data.frame
+- reads: the subset of columns containing the reads
+- by: the column containig the grouping factor
+- cont: the contamination levels
+- non_target: the non target levels
+
+Everything that is not contamination or non_target is assumend to be target:
+
+```{r}
+stat <- stats.tt(x=deepMeio,reads=deepMeio[,9:27],by=deepMeio$Group,cont=contamination,non_target=non_target)
+
+stat$stats
+```
+We can see form the output of `stat$stats` that the target group has 10 taxa and retains
+ most of the reads (4.4 Million) and ASVs (n_otus = 836).
+
+Inspect the stat object: 
+```{r, eval = FALSE}
+stat$cont
+stat$non_target
+stat$target
+```
+
+Write stats table to a file:
+```{r, eval = FALSE}
+write.table(stat$stats,file=paste('target.stats',gene,pip,pr,'.csv',sep='_'),sep=';',row.names=TRUE,col.names=NA)
+```
+Extract your target ASVs to new dataset:
+```{r}
+meio <- stat$target.table
+```
+remove non used taxa from `Group`
+```{r}
+meio$Group <- droplevels(meio$Group)
+```
 
 
 
 ## Create a color palette
-The function `pal2table()` created a matching table of taxa to colors and symbols, so that you can
+Before we proceed with producing graphs it would be good to have consistent colors for the taxon groups in all the graphs.
+The function `pal2table()` creates a matching table of taxa to colors and symbols, so that you can
 assign same colors and symbols to your taxa consistently in all your graphs. 
+Check `?pal2table()` for more options and control.
 ```{r}
-data(iris)
-library(dada2pp)
-iriscol <- pal2table(unique(iris$Species))
+meiocol <- pal2table(unique(meio$Group),pal='c25')
 ```
 inspect the created object:
 ```{r}
-iriscol
+meiocol
 ```
 View the assigend colors and sysmbols:
 ```{r, fig.show='hold'}
-plot(iriscol)
+plot(meiocol)
 ```
 
-
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(iriscol)
-```
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
+## Use your color palette
+To use your color palette there is the function `match2table`. See `?match2table()` for details.
 ```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+t1 <- table(meio$Group)
+or <- order(t1,decreasing=TRUE)
+assign.col <- match2table(names(t1[or]),meiocol,'col')
+par(oma = c(4, 0, 0, 0),xpd=NA)
+barplot(t1[or], col=assign.col,las=2)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Create graph with number of reads and ASV per sample
+The function `barp.table` will create the information needed to produce barplots.
+Inspect the results in `..$table`. See `?barp.table()` for more details.
+```{r}
+bp <- barp.table(meio[,9:27],meio$Group,sum) 
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+bp$table
 ```
 
-Also a quote using `>`:
+Create the barplots (see `?plot.barp_table()` for details):
+```{r,fig.width = 13,fig.height = 10}
+plot(bp,'dada2sum',pal2table=meiocol,ncol.leg=5,oma1=7)
+```
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+
+
+## Statistics for comparing between locations
+In the following section we will explain how to compare between locations from which we have replicate samples.
+We have 7 samples in location 1 and 12 samples in location 2. Create a vector:
+```{r}
+locations <- c(rep('loc1',7),rep('loc2',12))
+```
+Create a color palette for the locations:
+```{r,fig.width = 5,fig.height = 4}
+loccol <- pal2table(unique(locations))
+plot(loccol)
+```
+ 
+## Count shared ASVs between locations
+Use the function `countTaxa` to performe the statistics
+- x: the community table
+- taxa: the vector containing the taxa to count
+- fac: the factor grouping the samples
+
+```{r}
+countTaxa(x=meio[,9:27],taxa=meio$Group, fac=locations)
+```
+
+## Diversity values between locations
+Function 
+
+```{r}
+dd <- diverse.tt(x=meio[,9:27],by=locations,pal=loccol)
+
+dd
+```
+
+```{r}
+plot(dd)
+```
