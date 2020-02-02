@@ -27,7 +27,7 @@
 #'@export diverse.tt
 #'@seealso \code{\link{plot.diverse_tt}} 
 
-diverse.tt <- function(x,by,sample=min(N)*0.8,pal){
+diverse.tt <- function(x,by,sample=floor(min(N)*0.8),pal){
 
 #Number of individuals
 	N <- apply(x,FUN=sum,MARGIN=2)
