@@ -1,0 +1,30 @@
+
+## Multivariate structure test
+If you don't have RFtools, install from <a "href=https://github.com/pmartinezarbizu/RFtools target="_blank">here</a>
+
+```{r}
+library(RFtools)
+```
+      
+Note that you need to transpose your dataset, because functions in `vegan` and `RFtools` assume observations as lines and variables as columns (opposite as we have now).
+Use function `t()`.
+
+
+```{r}
+tmeio <- t(meio[,9:27])
+```
+
+Change the column names of transposed matrix to meaningful names
+```{r}
+colnames(tmeio) <- paste('ASV',1:ncol(tmeio),sep='')
+```
+
+We use function `MVSF.test` from package `RFtools`. This is a multivariate structure test using randomForest. It compares the OOB (out of bag) classification error against an empirical null model.
+
+```{r}
+mv.test <- MVSF.test(as.factor(locations),tmeio)
+```
+
+```{r}
+plot(mv.test)
+```

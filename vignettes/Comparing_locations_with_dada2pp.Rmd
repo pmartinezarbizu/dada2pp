@@ -1,0 +1,189 @@
+---
+title: "Comparing locations with dada2pp"
+author: "Pedro Martinez Arbizu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparing locations with dada2pp}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# Comparing locations with dada2pp
+by *Pedro Martinez Arbizu*
+
+> "This tutorial should be present
+<a href="https://github.com/pmartinezarbizu/dada2pp/wiki" target="_blank">here</a>"
+
+
+
+## Starting point
+You have followed the tutorial getting started with dada2pp using deepMeio dataset. 
+
+## Getting ready
+
+load library
+```{r}
+library(dada2pp)
+```
+You should have an object `meio` with the filtered ASV and stations.
+Otherwise quickly follow this:
+```{r}
+data(deepMeio)
+gene <- 'V1V2'
+pip <- 'dada2'
+pr <- 'DeepMeio' 
+deepMeio <- deepMeio[deepMeio$length>=300,]
+deepMeio[deepMeio$Group == 'isopods', 'Group'] <- 'crustaceans'
+deepMeio[deepMeio$Species %in% c( "Haplogonaria_sp._'schillingi'_UJ2011",
+ "Ascoparia_sp._UJ2011", "Nemertoderma_sp._SMNHUJ13330", "Proporus_brochii"), 'Group'] <- 'flatworms'
+contamination <- c('animals', 'eukaryotes', 'dinoflagellates', 'ascomycetes','golden_algae') 
+non_target <- c('cercozoans', 'hemichordates', 'hydrozoans', 'bryozoans', 'protozoa', 'mesozoans',
+'sea_cucumbers', 'tunicates', 'tusk_shells', 'solenogasters')
+target <- c('segmented_worms', 'crustaceans', 'ribbon_worms', 'nematodes', 'bivalves',
+'flatworms', 'gastrotrichs', 'gastropods', 'loriciferans', 'spoonworms')
+stat <- stats.tt(x=deepMeio,reads=deepMeio[,9:27],by=deepMeio$Group,cont=contamination,non_target=non_target)
+meio <- stat$target.table
+meio$Group <- droplevels(meio$Group)
+```
+
+## Statistics for comparing between locations
+In the following section we will explain how to compare between locations from which we have replicate samples.
+We have 7 samples in location 1 and 12 samples in location 2. Create a vector:
+```{r}
+locations <- as.factor(c(rep('loc1',7),rep('loc2',12)))
+```
+Create a color palette for the locations:
+```{r,fig.width = 5,fig.height = 4}
+loccol <- pal2table(unique(locations))
+plot(loccol)
+```
+ 
+## Count shared ASVs between locations
+Use the function `countTaxa` to perform the statistics
+- x: the community table
+- taxa: the vector containing the taxa to count
+- fac: the factor grouping the samples
+
+```{r}
+countTaxa(x=meio[,9:27],taxa=meio$Group, fac=locations)
+```
+## Veen Diagrams
+We can use the package `limma` to produce the graphs.
+The package is hosted in bioconductor so you need to:
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("limma")
+```
+   
+Note that you need to transpose your dataset, because functions in `limma`, `vegan` and `indicspecies` assume observations as lines and variables as columns (opposite to what we have now).
+Use function `t()`.
+
+
+```{r}
+tmeio <- t(meio[,9:27])
+```
+
+Change the column names of transposed matrix to meaningful names
+```{r}
+colnames(tmeio) <- paste(1:ncol(tmeio),'_',meio$Species,sep='')
+```
+
+```{r}
+library(limma)
+library(vegan)
+venn1 <- aggregate(tmeio,list(locations),sum)
+vennpa <- decostand(venn1[,-1],'pa')
+rownames(vennpa) <- venn1[,1]
+vc <-  vennCounts(t(vennpa))
+vennDiagram(vc,circle.col=match2table(colnames(vc),loccol,'col'),main='Shared OTUs between sites')
+```
+
+
+## Diversity values between locations
+Function 
+
+```{r}
+dd <- diverse.tt(x=meio[,9:27],by=locations,pal=loccol)
+
+dd
+```
+
+```{r}
+plot(dd)
+```
+## Rarefaction analysis
+We use function `rarefy` from package `vegan`.
+
+In this example the step is set to `1000` meaning that we will estimate the number of ASV every cumulative 1000 reads. Change if needed.
+
+```{r, fig.show='hold'}
+step <- 1000
+rfy <- rarefy(tmeio,sample= seq(1,max(dd$N),step))
+
+par(fig= c(0,1,0,1))
+plot(rfy[1,],type='n',xlab=paste('number of sequences * ',step), ylab= 'number of ASVs',
+	ylim=c(0,round(max(rfy[,ncol(rfy)]),0)+1),main='sample based rarefaction')
+
+for (elem in 1:nrow(rfy)){
+lines(rfy[elem,1:floor(dd$N[elem]/step)],col=as.character(dd$col[elem]),lwd=3)
+}
+for (telem in 1:nrow(rfy)){
+text(dd$N[telem]/step,max(rfy[telem,]),labels=rownames(dd)[telem])
+} 
+``` 
+
+The curves of all samples have reached an asymptote, this means that we captured all ASVs of each sample.
+We could have multiplexed much more samples in this run. About 60.000 reads per sample would have been enough to capture all diversity. 
+ 
+
+## Indicator species
+We can use the function `multipatt` from package `indicspecies` to explore the significant association of ASVs to locations.
+
+```{r}
+library(indicspecies) 
+```
+
+```{r}
+mp <- multipatt(tmeio,locations)
+summary(mp,indvalcomp=TRUE)
+```
+In loc1 there are 30 species (ASVs) that are indicator or characteristic for that location, while location loc2 has only 2 indicator species.
+
+## Community analysis
+
+Next we want to know if the communities of the two locations are different.
+ For these analyses we use package `vegan`.
+
+Before we start it, would be advisable to transform our dataset to get back realistic starting proportions. During the library preparation we have performed 2 PCRs which have amplified exponentially the number of copies.
+Therefore we apply the logarithmic function to the number of reads. Also the different samples do not have the same number of reads, therefore we are not interested in comparing the absolute values but rather the relative values.
+
+So we apply log +1 followed by hellinger transformation:
+
+```{r}
+tmeioLH <- decostand(log(tmeio+1),method='hellinger')
+```
+
+
+```{r}
+mds <- metaMDS(tmeioLH)
+plot(mds$points, pch=21, cex=1.5, bg=as.character(dd$col), main='MDS Plot deepMeio, log()+1 hellinger')
+```
+
+The samples of loc1 and loc2 seem quite separated from each other according to relative abundance of ASVs.
+
+PERMANOVA `adonis` procedure reveals that differences are significant. Remember to specify euclidean distance, otherwise you will apply bray-curtis on hellinger transformed data.
+
+```{r}
+adonis(tmeioLH ~ locations, distance = 'euclidean')
+```
+
+

@@ -24,13 +24,13 @@ by *Pedro Martinez Arbizu*
 
 
 ## Starting point
-You have analysed your metabarcoding results with dada2 (or other pipeline) and produced a
- *community table*. This means you have ASVs (or OTUs) as lines and localities as columns.
+You have analyzed your metabarcoding results with <a href="https://benjjneb.github.io/dada2/tutorial.html" target="_blank">dada2</a> (or other pipeline) and produced a
+ *OTU/ASV table*. This means you have ASVs (or OTUs) as lines and localities as columns.
 
 ## Getting ready
 install library from Github
 
-*Windows users need Rtools installed to use devtools*
+*Windows users need <a href="https://cran.r-project.org/bin/windows/Rtools/index.html" target="_blank" >Rtools</a> installed to use devtools*
 ```{r,eval = FALSE}
 library(devtools)
 install_github("pmartinezarbizu/dada2pp")
@@ -46,7 +46,7 @@ Load the example dataset `deepMeio`.
 This dataset contains the result of metabarcoding of deep-sea meiofauna.
 The amplified fragment was V1V2 from 18s. The dada2 AVS were blasted against GenBank and
  some columns with statistic results were added (columns 1:8).
- The number of reads on 19 stations is recorded on colums 9:27. Each line represents one ASV.
+ The number of reads on 19 stations is recorded on columns 9:27. Each line represents one ASV.
 
 ```{r}
 data(deepMeio)
@@ -66,7 +66,7 @@ pip <- 'dada2'
 pr <- 'DeepMeio' 
 ```
 ## Filter some ASVs
-Produce a graph of frament lengths
+Produce a graph of fragment lengths
 
 ```{r, fig.show='hold'}
 mode <- as.integer(names(which(table(deepMeio$length)==max(table(deepMeio$length)))))
@@ -95,7 +95,7 @@ deepMeio <- deepMeio[deepMeio$qcovs>=90,]
 ```{r}
 apply(deepMeio[,9:27],FUN=sum,MARGIN=2)
 ```
-As there is no sample with extrem low number of reads we keep all.
+As there is no sample with extremely low number of reads we keep all.
 
 Otherwise, to remove (for instance) sample loc1_2:
 ```{r, eval = FALSE}
@@ -123,11 +123,11 @@ deepMeio$Group <- droplevels(deepMeio$Group)
 
 ## Clean up Genbank inconsistent classification
 
-Column `Group` contains the higher taxon assigment for the AVS. How many are different groups are there?
+Column `Group` contains the higher taxon assignment for the AVS. How many are different groups are there?
 ```{r}
 unique(deepMeio$Group)
 ```
-At first glace we discover 3 inconsistecies:
+At first glance we discover 3 inconsistencies:
 
 - There is a group `crustaceans` but also a separate group `isopods` which are obviously also crustaceans.
 - There is a separate group `animals`
@@ -180,11 +180,11 @@ target <- c('segmented_worms', 'crustaceans', 'ribbon_worms', 'nematodes', 'biva
 Use the function `stats.tt` to inspect your results and reduce your dataset to target taxa.
 - x: your data.frame
 - reads: the subset of columns containing the reads
-- by: the column containig the grouping factor
+- by: the column containing the grouping factor
 - cont: the contamination levels
 - non_target: the non target levels
 
-Everything that is not contamination or non_target is assumend to be target:
+Everything that is not contamination or non_target is assumed to be target:
 
 ```{r}
 stat <- stats.tt(x=deepMeio,reads=deepMeio[,9:27],by=deepMeio$Group,cont=contamination,non_target=non_target)
@@ -228,7 +228,7 @@ inspect the created object:
 ```{r}
 meiocol
 ```
-View the assigend colors and sysmbols:
+View the assigned colors and symbols:
 ```{r, fig.show='hold'}
 plot(meiocol)
 ```
@@ -254,42 +254,6 @@ bp$table
 
 Create the barplots (see `?plot.barp_table()` for details):
 ```{r,fig.width = 13,fig.height = 10}
-plot(bp,'dada2sum',pal2table=meiocol,ncol.leg=5,oma1=7)
+plot(bp, 'dada2sum', pal2table=meiocol, ncol.leg=5,oma1=7)
 ```
 
-
-
-## Statistics for comparing between locations
-In the following section we will explain how to compare between locations from which we have replicate samples.
-We have 7 samples in location 1 and 12 samples in location 2. Create a vector:
-```{r}
-locations <- c(rep('loc1',7),rep('loc2',12))
-```
-Create a color palette for the locations:
-```{r,fig.width = 5,fig.height = 4}
-loccol <- pal2table(unique(locations))
-plot(loccol)
-```
- 
-## Count shared ASVs between locations
-Use the function `countTaxa` to performe the statistics
-- x: the community table
-- taxa: the vector containing the taxa to count
-- fac: the factor grouping the samples
-
-```{r}
-countTaxa(x=meio[,9:27],taxa=meio$Group, fac=locations)
-```
-
-## Diversity values between locations
-Function 
-
-```{r}
-dd <- diverse.tt(x=meio[,9:27],by=locations,pal=loccol)
-
-dd
-```
-
-```{r}
-plot(dd)
-```
