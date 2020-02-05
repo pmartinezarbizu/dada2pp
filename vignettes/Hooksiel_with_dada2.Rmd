@@ -203,11 +203,11 @@ plotErrors(errF, nominalQ=TRUE)
 ## Dereplicate identical reads
 
 ```{r}
-derepFs <- derepFastq(filtFs, verbose = TRUE)
-derepRs <- derepFastq(filtRs, verbose = TRUE)
+#derepFs <- derepFastq(filtFs, verbose = TRUE)
+#derepRs <- derepFastq(filtRs, verbose = TRUE)
 # Name the derep-class objects by the sample names
-names(derepFs) <- sample.names
-names(derepRs) <- sample.names
+#names(derepFs) <- sample.names
+#names(derepRs) <- sample.names
 ```
 
 ## Core dada2 algorithm, the sample inference
