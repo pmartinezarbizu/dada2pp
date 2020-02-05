@@ -1,0 +1,268 @@
+---
+title: "Hooksiel with dada2"
+author: "Pedro Martinez Arbizu & Sahar Khodami"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Hooksiel with dada2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# Working with dada2pp
+by *Pedro Martinez Arbizu* and *Sahar Khodami*
+
+This pipeline is based in the original dada2 tutorial <a href="https://benjjneb.github.io/dada2/tutorial.html" target="_blank">here</a>"
+
+
+## Starting point
+You have downloaded the MiSeq files from the Hooksiel Copepod run.
+
+We have removed the primers with a custom script in bash and bbmap (java)
+
+home/pmartinez/projects/metabarcoding/vsearch/testadaptertrimm/trimmadapt.sh
+
+Step 1 : Trimm adapter overhang using paired-end reads and primer sequence
+
+processing AV
+
+java -Djava.library.path=/home/pmartinez/Downloads/bbmap/jni/ -ea -Xmx2711m -Xms2711m -cp /home/pmartinez/Downloads/bbmap/current/ jgi.BBDukF in1=AV_S12_L001_R1_001.fastq.gz in2=AV_S12_L001_R2_001.fastq.gz out1=AV_R1_tr.fastq out2=AV_R2_tr.fastq literal=GCTTGTCTCAAAGATTAAGCC,GCCTGCTGCCTTCCTTGGA ktrim=l k=15 hdist=1 rcomp=t tbo overwrite=true
+Executing jgi.BBDukF [in1=AV_S12_L001_R1_001.fastq.gz, in2=AV_S12_L001_R2_001.fastq.gz, out1=AV_R1_tr.fastq, out2=AV_R2_tr.fastq, literal=GCTTGTCTCAAAGATTAAGCC,GCCTGCTGCCTTCCTTGGA, ktrim=l, k=15, hdist=1, rcomp=t, tbo, overwrite=true]
+
+BBDuk version 37.68
+Initial:
+Memory: max=2725m, free=2668m, used=57m
+
+Added 516 kmers; time: 	0.071 seconds.
+
+Memory: max=2725m, free=2568m, used=157m
+
+Input is being processed as paired
+
+Started output streams:	0.199 seconds.
+
+Processing time:   		40.296 seconds.
+
+Input:                  	1469410 reads 		427248997 bases.
+
+KTrimmed:               	1397433 reads (95.10%) 	28329325 bases (6.63%)
+
+Trimmed by overlap:     	6 reads (0.00%) 	871 bases (0.00%)
+
+Total Removed:          	2614 reads (0.18%) 	28330196 bases (6.63%)
+
+Result:                 	1466796 reads (99.82%) 	398918801 bases (93.37%)
+
+Time:   			40.598 seconds.
+
+Reads Processed:       1469k 	36.19k reads/sec
+
+Bases Processed:        427m 	10.52m bases/sec
+
+
+
+Step 1 : Trimm adapter overhang using paired-end reads and primer sequence
+processing AW
+
+
+java -Djava.library.path=/home/pmartinez/Downloads/bbmap/jni/ -ea -Xmx2661m -Xms2661m -cp /home/pmartinez/Downloads/bbmap/current/ jgi.BBDukF in1=AW_S13_L001_R1_001.fastq.gz in2=AW_S13_L001_R2_001.fastq.gz out1=AW_R1_tr.fastq out2=AW_R2_tr.fastq literal=GCTTGTCTCAAAGATTAAGCC,GCCTGCTGCCTTCCTTGGA ktrim=l k=15 hdist=1 rcomp=t tbo overwrite=true
+Executing jgi.BBDukF [in1=AW_S13_L001_R1_001.fastq.gz, in2=AW_S13_L001_R2_001.fastq.gz, out1=AW_R1_tr.fastq, out2=AW_R2_tr.fastq, literal=GCTTGTCTCAAAGATTAAGCC,GCCTGCTGCCTTCCTTGGA, ktrim=l, k=15, hdist=1, rcomp=t, tbo, overwrite=true]
+
+BBDuk version 37.68
+Initial:
+Memory: max=2675m, free=2619m, used=56m
+
+Added 516 kmers; time: 	0.041 seconds.
+
+Memory: max=2675m, free=2549m, used=126m
+
+Input is being processed as paired
+Started output streams:	0.107 seconds.
+Processing time:   		58.565 seconds.
+
+Input:                  	2369544 reads 		711096153 bases.
+
+KTrimmed:               	2343351 reads (98.89%) 	47452652 bases (6.67%)
+
+Trimmed by overlap:     	5 reads (0.00%) 	730 bases (0.00%)
+
+Total Removed:          	2692 reads (0.11%) 	47453382 bases (6.67%)
+
+Result:                 	2366852 reads (99.89%) 	663642771 bases (93.33%)
+
+Time:   			58.733 seconds.
+
+Reads Processed:       2369k 	40.34k reads/sec
+
+Bases Processed:        711m 	12.11m bases/sec
+
+
+pmartinez@pmartinez-P5Q-E:~/projects/metabarcoding/kursHooksiel$ 
+
+
+## Getting ready
+install `dada2`
+
+```{r,eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("dada2", version = "3.10")
+```
+
+
+load library
+```{r}
+library(dada2)
+```
+
+Change your R working directory to the path of your fastq.gz files.
+
+Define the path to your fastq.gz files
+
+```{r}
+getwd()
+path <- "C:/Users/pmartinez/Documents/projects/metabarcoding/kursHooksiel"
+list.files(path)
+```
+
+## Extract forward and reverse file names
+
+```{r}
+# Forward 
+fnFs <- sort(list.files(path, pattern="_R1_001tr.fastq.gz", full.names = TRUE))
+# Reverse
+fnRs <- sort(list.files(path, pattern="_R2_001tr.fastq.gz", full.names = TRUE))
+# Extract sample names
+sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+```
+## Plot quality profiles Forward reads
+```{r}
+plotQualityProfile(fnFs[1:2])
+```
+
+Note that green line is average quality score at that position.
+We want to keep average Q30 or higher. 
+Sequences start getting bad at bp 230-250
+
+Trimming last based but keeping about 50 bp overlap to allow contig formation.
+ 
+V1V2 fragment sequenced here is about 360 bp
+
+360/2 = 180 + 50 = 230
+
+We are save if the keep 240 bp = 60 bp overlap
+
+Visualize the reverse reads. They are normally lower quality.
+
+We will keep here 230 bp 
+
+```{r}
+plotQualityProfile(fnRs[1:2])
+```
+
+## Filter and trim
+
+Create subdirectory and move files
+```{r}
+filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
+filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
+names(filtFs) <- sample.names
+names(filtRs) <- sample.names
+```
+
+Apply filter. This will take some as multithreading is not supported in Windows. In my computer it takes 10 minutes.
+
+```{r}
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(232,232),
+              maxN=0, maxEE=c(2,3), truncQ=2, rm.phix=TRUE,
+              compress=TRUE, multithread=TRUE) # On Windows set multithread=FALSE
+head(out)
+```
+
+## Learn the error rates. This takes 19 minutes each in my computer
+
+```{r}
+errF <- learnErrors(filtFs, multithread=TRUE)
+```
+
+```{r}
+errR <- learnErrors(filtRs, multithread=TRUE)
+```
+
+
+```{r, fig.show='hold'}
+plotErrors(errF, nominalQ=TRUE)
+```
+
+## Dereplicate identical reads
+
+```{r}
+derepFs <- derepFastq(filtFs, verbose = TRUE)
+derepRs <- derepFastq(filtRs, verbose = TRUE)
+# Name the derep-class objects by the sample names
+names(derepFs) <- sample.names
+names(derepRs) <- sample.names
+```
+
+## Core dada2 algorithm, the sample inference
+
+```{r}
+dadaFs <- dada(filtFs, err=errF, multithread=TRUE)
+```
+
+```{r}
+dadaRs <- dada(filtRs, err=errR, multithread=TRUE)
+```
+
+```{r}
+dadaFs[[1]]
+```
+
+
+## Merge paired reads
+
+
+```{r}
+mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=TRUE)
+# Inspect the merger data.frame from the first sample
+head(mergers[[1]])
+```
+
+## Produce sequence table
+```{r}
+seqtab <- makeSequenceTable(mergers)
+dim(seqtab)
+```
+
+## Remove chimeras
+
+```{r}
+seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
+dim(seqtab.nochim)
+```
+
+
+
+```{r}
+sum(seqtab.nochim)/sum(seqtab)
+```
+
+## Track reads through pipeline
+
+```{r}
+getN <- function(x) sum(getUniques(x))
+track <- cbind(out, sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN), rowSums(seqtab.nochim))
+# If processing a single sample, remove the sapply calls: e.g. replace sapply(dadaFs, getN) with getN(dadaFs)
+colnames(track) <- c("input", "filtered", "denoisedF", "denoisedR", "merged", "nonchim")
+rownames(track) <- sample.names
+head(track)
+```
+
+
+
