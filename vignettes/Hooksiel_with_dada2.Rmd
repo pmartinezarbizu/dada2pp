@@ -148,19 +148,20 @@ plotQualityProfile(fnFs[1:2])
 
 Note that green line is average quality score at that position.
 We want to keep average Q30 or higher. 
-Sequences start getting bad at bp 230-250
+Sequences start getting bad at bp 210-230
 
 Trimming last based but keeping about 50 bp overlap to allow contig formation.
  
-V1V2 fragment sequenced here is about 360 bp
+V1V2 fragment sequenced here is about 364 bp
 
-360/2 = 180 + 50 = 230
+Read length * 2 - Fragment length = overlap
+205 * 2 - 364 = 46
 
-We are save if the keep 240 bp = 60 bp overlap
+We are save if the keep 205 bp = 46 bp overlap
 
 Visualize the reverse reads. They are normally lower quality.
 
-We will keep here 230 bp 
+We will keep also 205 bp 
 
 ```{r}
 plotQualityProfile(fnRs[1:2])
@@ -179,7 +180,7 @@ names(filtRs) <- sample.names
 Apply filter. This will take some as multithreading is not supported in Windows. In my computer it takes 10 minutes.
 
 ```{r}
-out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(232,232),
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(205,205),
               maxN=0, maxEE=c(2,3), truncQ=2, rm.phix=TRUE,
               compress=TRUE, multithread=TRUE) # On Windows set multithread=FALSE
 head(out)
