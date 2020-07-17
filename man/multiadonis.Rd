@@ -25,6 +25,8 @@ multiadonis(
 
 \item{frac}{used to estimate the argument sample to be passed to rrarefy. Fraction (e.g.0.3) value corresponding to the minimum number of reads/obeservations per sample.}
 
+\item{balance}{TRUE or FALSE, if factors should be balanced}
+
 \item{...}{additional arguments for adonis (e.g permutations)}
 }
 \value{

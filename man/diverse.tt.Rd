@@ -4,7 +4,7 @@
 \alias{diverse.tt}
 \title{Diversity Values Based on Taxon Table}
 \usage{
-diverse.tt(x, by, sample = min(N) * 0.8, pal)
+diverse.tt(x, by, sample = floor(min(N) * 0.8), pal)
 }
 \arguments{
 \item{x}{community table}
