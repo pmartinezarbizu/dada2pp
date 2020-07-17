@@ -127,7 +127,8 @@ Define the path to your fastq.gz files
 
 ```{r}
 getwd()
-path <- "C:/Users/pmartinez/Documents/projects/metabarcoding/kursHooksiel"
+#path <- "C:/Users/pmartinez/Documents/projects/metabarcoding/kursHooksiel"
+path <- "D:/pmartinez/Dokumente/projects/kursHooksiel"
 list.files(path)
 ```
 
@@ -203,21 +204,21 @@ plotErrors(errF, nominalQ=TRUE)
 ## Dereplicate identical reads
 
 ```{r}
-#derepFs <- derepFastq(filtFs, verbose = TRUE)
-#derepRs <- derepFastq(filtRs, verbose = TRUE)
+derepFs <- derepFastq(filtFs, verbose = TRUE)
+derepRs <- derepFastq(filtRs, verbose = TRUE)
 # Name the derep-class objects by the sample names
-#names(derepFs) <- sample.names
-#names(derepRs) <- sample.names
+names(derepFs) <- sample.names
+names(derepRs) <- sample.names
 ```
 
 ## Core dada2 algorithm, the sample inference
 
 ```{r}
-dadaFs <- dada(filtFs, err=errF, multithread=TRUE)
+dadaFs <- dada(derepFs, err=errF, multithread=TRUE)
 ```
 
 ```{r}
-dadaRs <- dada(filtRs, err=errR, multithread=TRUE)
+dadaRs <- dada(derepRs, err=errR, multithread=TRUE)
 ```
 
 ```{r}
@@ -264,5 +265,23 @@ rownames(track) <- sample.names
 head(track)
 ```
 
+We are basically done with dada2 analysis. We just need to export the sequences and the ASV table.
+
+```{r}
+#export the track data
+write.csv(track,'trackdada2.cvs')
+
+#export the dada2 sequences
+write.table(colnames(seqtab.nochim),'nonchim.dada2.txt')
+
+#export the community table
+write.table(t(seqtab.nochim),'full.nonchim.dada2.txt',col.names=FALSE)
+```
+
+Save the workspace
+```{r}
+save.image('dada2.RData')
+###STOP here and assign taxonomy with dada2script on server
+```
 
 
