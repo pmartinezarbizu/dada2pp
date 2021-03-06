@@ -15,3 +15,5 @@ import(MASS)
 import(graphics)
 import(splitstackshape)
 import(vegan)
+S3method(plot,pal2table)
+
