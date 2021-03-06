@@ -8,7 +8,7 @@
 #' 
 #'@author Pedro Martinez Arbizu
 #'
-##'@import graphics 
+#'@import base graphics 
 #'@examples
 #' data(iris)
 #' irc <- pal2table(iris$Species)
