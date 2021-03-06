@@ -37,6 +37,7 @@
 #'plot(bp1,pal2table=colmeio)
 #'
 #'@export plot.barp_table
+#'@exportS3Method plot barp_table
 #'@seealso \code{\link{plot.barp_table}} 
 
 

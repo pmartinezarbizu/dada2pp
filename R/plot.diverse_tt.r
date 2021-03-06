@@ -17,6 +17,7 @@
 #'
 #'
 #'@export plot.diverse_tt
+#'@exportS3Method plot diverse_tt
 #'@seealso \code{\link{plot.diverse_tt}} 
 
 plot.diverse_tt <- function(x,ty='ASVs'){
