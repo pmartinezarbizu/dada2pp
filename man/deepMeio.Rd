@@ -4,7 +4,9 @@
 \name{deepMeio}
 \alias{deepMeio}
 \title{Example data deepMeio.RData for dada2pp}
-\format{A data frame with 500 rows (ASVs), 27 variables(8 blast result, 19 samples)}
+\format{
+A data frame with 500 rows (ASVs), 27 variables(8 blast result, 19 samples)
+}
 \usage{
 data(deepMeio)
 }
