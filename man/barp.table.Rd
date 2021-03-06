@@ -29,7 +29,9 @@ It takes a Taxon table (OTU or ASV table) and counts the number of reads
 aggregating by the vector specified by 'by' using function specified with 'fun'
 }
 \examples{
-
+bp1 <- barp.table(deepMeio[,9:27],deepMeio$Group,sum)
+colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
+plot(bp1,pal2table=colmeio)
 
 
 }

@@ -24,7 +24,9 @@
 #'
 #'@import graphics 
 #'@examples
-#' 
+#' bp1 <- barp.table(deepMeio[,9:27],deepMeio$Group,sum)
+#' colmeio <- pal2table( c(rownames(bp1$table),'Branchiopoda','Calanoida','Cyclopoida','Harpacticoida','Isopoda','Misophrioida','Ostracoda','Siphonostomatoida','Tanaidacea','Tantulocarida'),pal='c25bro2')
+#' plot(bp1,pal2table=colmeio)
 #'
 #'
 #'@export barp.table

@@ -15,7 +15,7 @@
 #'@author Pedro Martinez Arbizu
 #'
 #'@import vegan 
-#'@examples countTaxa(meio[,9:27],meio$Group,area)
+#'@examples countTaxa(deepMeio[,9:27],deepMeio$Group,fac= c(rep('area1',7),rep('area2',12)))
 #' 
 #'
 #'
