@@ -8,7 +8,7 @@
 #' 
 #'@author Pedro Martinez Arbizu
 #'
-#'@import graphics 
+##'@import graphics 
 #'@examples
 #' data(iris)
 #' irc <- pal2table(iris$Species)
@@ -23,4 +23,5 @@ plot(rep(1,nrow(x)),nrow(x):1,cex=2,pch=x$pch,bg=as.vector(x$col),axes=FALSE,ann
 points(rep(1,nrow(x))+0.5,nrow(x):1,cex=2,pch=x$pch2,col=as.vector(x$col))
 text(rep(1,nrow(x))+1,nrow(x):1,labels=x$class,pos=4)
 }
+
 
