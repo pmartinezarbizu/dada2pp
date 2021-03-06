@@ -15,6 +15,7 @@
 #' plot(irc)
 #'
 #'@export plot.pal2table
+#'@exportS3method plot::pal2table
 #'@seealso \code{\link{pal2table}} 
 
 
