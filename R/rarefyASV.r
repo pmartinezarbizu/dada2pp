@@ -44,11 +44,10 @@ return(ret)
 
 }
 
-plot.rarefyASV <- function(x, ...){
+plot.rarefyASV <- function(x,xlab='number of reads', ylab= 'number of ASVs',main='sample based rarefaction', ...){
 
 plot(1,1,xlim=c(0,max(x$stepx)),ylim=c(0,max(x$rare)),
-type='n',xlab='number of reads', ylab= 'number of ASVs',
-main='sample based rarefaction')
+type='n', xlab=xlab,ylab=ylab,main=main, ... )
  
 for (elem in 1:nrow(x$rare)){
 lines(x$stepx[1:x$maxn[elem]],x$rare[elem,1:x$maxn[elem]], ...)
