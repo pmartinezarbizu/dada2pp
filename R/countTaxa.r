@@ -36,8 +36,13 @@ res <- c()
 for(elem in 1:nrow(by_fac)){
 res <- cbind(res,table(as.factor(taxa)[t(by_fac_pa[elem,])>0]))
 }
-colnames(res) <- by_fac[,1] 
-res <- cbind(total,res,shared =table(as.factor(taxa)[shared==2]) )
+sha_n <- c()
+for(i in 1:length(unique(fac))){
+res <- cbind(res, table(as.factor(taxa)[shared==i]))
+sha_n <- c(sha_n,paste('shared',i,sep='_')) 
+}
+colnames(res) <- c(by_fac[,1],sha_n) 
+res <- cbind(total,res )
 return(res)
 }
  
