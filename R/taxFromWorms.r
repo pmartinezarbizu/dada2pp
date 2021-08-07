@@ -4,8 +4,6 @@
 #'
 #'@param x A vector of species names 
 #'
-#'@param sep separator between genus and species. Default is space ' ' or '_' 
-#'
 #'@param ... additional arguments passed to worms::wormsmatchsp and worms::wormsmatchgen.
 #'
 #'@details

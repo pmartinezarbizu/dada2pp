@@ -10,8 +10,6 @@ taxFromWorms(x, ...)
 \item{x}{A vector of species names}
 
 \item{...}{additional arguments passed to worms::wormsmatchsp and worms::wormsmatchgen.}
-
-\item{sep}{separator between genus and species. Default is space ' ' or '_'}
 }
 \description{
 Query a vector to taxa names against WORMS and retrives valid names and classification
