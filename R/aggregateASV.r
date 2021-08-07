@@ -16,7 +16,7 @@
 #'@examples
 #' data(deepMeio)
 #' # grade >= 97 will give an indication of good species assignment
-#' grade <- ((shortMeio$pident) + 2*(shortMeio$qcovs))/3
+#' grade <- ((deepMeio$pident) + 2*(deepMeio$qcovs))/3
 #' shortMeio <- deepMeio[grade>= 97,]
 #' # grade > 97 will give an indication of good species assignment
 #' # retrieve classification from WORMS
@@ -26,7 +26,6 @@
 #' agg_tax_deepMeio <- aggregateASV(x=shortMeio[,9:ncol(shortMeio)], by=shortMeio$Species,other_str=tax_deepMeio[,2:6],other_num=shortMeio[,2:5])
 #' 
 #' agg_tax_deepMeio_2 <- aggregateASV(x=shortMeio[,9:ncol(shortMeio)], by=shortMeio$Species,other_num=shortMeio[,2:5])
-
 #' 
 #'@export  aggregateASV
 #'@seealso \code{\link{taxFromWorms}} 
