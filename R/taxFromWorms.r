@@ -22,7 +22,6 @@
 #'@examples
 #' data(deepMeio)
 #' tax_deepMeio <- taxFromWorms(deepMeio$Species[1:51])
-#' plot(irc)
 #'
 #'#example retrieve non only marine species 
 #' tax_deepMeio <- taxFromWorms(deepMeio$Species[1:51], marine_only=FALSE)
