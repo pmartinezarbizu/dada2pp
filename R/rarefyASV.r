@@ -14,8 +14,11 @@
 #' 
 #'@examples 
 #' 
+#' rr <- rarefyASV(deepMeio[,9:ncol(deepMeio)],step=200)
+#' plot(rr)
 #'
-#'
+#' #provide colors for groups of samples 
+#' plot(rr,col=c(rep('red',10),rep('green',9)))
 #'
 #'@export rarefyASV
 #'@export plot.rarefyASV
@@ -44,14 +47,19 @@ return(ret)
 
 }
 
-plot.rarefyASV <- function(x,xlab='number of reads', ylab= 'number of ASVs',main='sample based rarefaction', ...){
-
+plot.rarefyASV <- function(x,xlab='number of reads', col='black', ylab= 'number of ASVs',main='sample based rarefaction', ...){
+if(length(col) < nrow(x$rare)){warning('Number of colors is less than number of samples, check argument col') }
+coln <-rep(col,nrow(x$rare))
 plot(1,1,xlim=c(0,max(x$stepx)),ylim=c(0,max(x$rare)),
 type='n', xlab=xlab,ylab=ylab,main=main, ... )
  
 for (elem in 1:nrow(x$rare)){
-lines(x$stepx[1:x$maxn[elem]],x$rare[elem,1:x$maxn[elem]], ...)
+lines(x$stepx[1:x$maxn[elem]],x$rare[elem,1:x$maxn[elem]],col=coln[elem], ...)
 }
 }
+
+
+
+
 
 

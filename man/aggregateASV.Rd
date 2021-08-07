@@ -23,7 +23,7 @@ Caution be sure than only aggregate relieable species assignments.
 \examples{
 data(deepMeio)
 # grade >= 97 will give an indication of good species assignment
-grade <- ((shortMeio$pident) + 2*(shortMeio$qcovs))/3
+grade <- ((deepMeio$pident) + 2*(deepMeio$qcovs))/3
 shortMeio <- deepMeio[grade>= 97,]
 # grade > 97 will give an indication of good species assignment
 # retrieve classification from WORMS

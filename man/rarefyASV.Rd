@@ -22,8 +22,11 @@ A plot
 }
 \examples{
 
+rr <- rarefyASV(deepMeio[,9:ncol(deepMeio)],step=200)
+plot(rr)
 
-
+#provide colors for groups of samples 
+plot(rr,col=c(rep('red',10),rep('green',9)))
 
 }
 \seealso{
