@@ -4,8 +4,11 @@ ________________________________________________________________________________
 
 ## INSTALLATION
 make sure you have ```devtools``` installed and loaded, for windows also install ```Rtools```
+NOTE that worms was removed from CRAN so you need to install from github before installing dada2pp
 
 In your R session
+```devtools::install_github("janhoo/worms")```
+
 
 ```install_github("pmartinezarbizu/dada2pp")```
 
