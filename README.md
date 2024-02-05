@@ -12,6 +12,6 @@ In your R session
 ```devtools::install_github("janhoo/worms")```
 
 
-```install_github("pmartinezarbizu/dada2pp")```
+```devtools::install_github("pmartinezarbizu/dada2pp")```
 
 That's it
