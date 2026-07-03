@@ -10,7 +10,7 @@ Depends: R (>= 3.1.0)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports: graphics , vegan, splitstackshape, MASS
+Imports: graphics , vegan, splitstackshape, MASS, dplyr, worrms
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
