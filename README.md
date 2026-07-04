@@ -5,12 +5,10 @@ ________________________________________________________________________________
 ## INSTALLATION
 make sure you have ```devtools``` installed and loaded, for windows also install ```Rtools```
 
-NOTE that worms was removed from CRAN so you need to install from github before installing dada2pp
+NOTE that worms was removed from CRAN and is deprecated. 
+We include now the function taxFromWorrms which uses pakage worrms instead. Thanks to Mattew Tamayo.
 
 In your R session
-
-```devtools::install_github("janhoo/worms")```
-
 
 ```devtools::install_github("pmartinezarbizu/dada2pp")```
 
