@@ -15,10 +15,7 @@ rarefyASV(x, step)
 A plot
 }
 \description{
-
-}
-\details{
-
+rarefy and Plot ASV reads
 }
 \examples{
 
@@ -27,9 +24,6 @@ plot(rr)
 
 #provide colors for groups of samples 
 plot(rr,col=c(rep('red',10),rep('green',9)))
-
-}
-\seealso{
 
 }
 \author{

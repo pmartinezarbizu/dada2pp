@@ -17,10 +17,7 @@ countTaxa(x, taxa, fac, ...)
 A data frame
 }
 \description{
-
-}
-\details{
-
+Count ASVs/OTUs per Taxon and Area
 }
 \examples{
 countTaxa(deepMeio[,9:27],deepMeio$Group,fac= c(rep('area1',7),rep('area2',12)))

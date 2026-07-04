@@ -17,9 +17,6 @@ aggregateASV(x, by, other_str, other_num)
 Several ASVs will be assigned to same species name. This function aggregates ASVs according to a variable (species name, accession number etc) 
 Caution be sure than only aggregate relieable species assignments.
 }
-\details{
-
-}
 \examples{
 data(deepMeio)
 # grade >= 97 will give an indication of good species assignment

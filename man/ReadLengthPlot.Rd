@@ -20,19 +20,13 @@ ReadLengthPlot(
 A plot
 }
 \description{
-
-}
-\details{
-
+Plot ASV read length frequency
 }
 \examples{
 countTaxa(deepMeio[,9:27],deepMeio$Group,fac= c(rep('area1',7),rep('area2',12)))
 
 
 
-
-}
-\seealso{
 
 }
 \author{

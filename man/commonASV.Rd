@@ -23,9 +23,6 @@ Retrieve the most common ASVs by total number of reads and total number of sampl
 This function will order the ASVs by total number of reads and by
 number of samples present and return two lists containing the of the n top ASVs
 }
-\examples{
-
-}
 \seealso{
 \code{\link{ASV_outliers}}
 }

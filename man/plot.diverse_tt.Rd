@@ -6,22 +6,11 @@
 \usage{
 \method{plot}{diverse_tt}(x, ty = "ASVs")
 }
-\arguments{
-\item{x}{}
-}
 \value{
 A graph with 4 boxplots
 }
 \description{
-
-}
-\details{
-
-}
-\examples{
-
-
-
+Plot Method for divers.tt
 }
 \seealso{
 \code{\link{plot.diverse_tt}}

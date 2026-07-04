@@ -18,5 +18,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Pedro Martinez Arbizu \email{pmartinez@senckenberg.de}
 
+Authors:
+\itemize{
+  \item Pedro Martinez Arbizu \email{pmartinez@senckenberg.de}
+}
+
 }
 \keyword{internal}

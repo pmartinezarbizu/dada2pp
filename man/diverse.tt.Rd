@@ -26,11 +26,6 @@ Calculate miscelaneous diversity values
 Returns parameters N= number of specimens, S= number of species,
 H= Shannon index, J= Pielou's evenness and ES= estimated number od species for N =sample
 }
-\examples{
-
-
-
-}
 \seealso{
 \code{\link{plot.diverse_tt}}
 }

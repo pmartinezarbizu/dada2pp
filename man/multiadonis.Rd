@@ -33,10 +33,7 @@ multiadonis(
 A dataframe with results of adonis and results of adonis on rarefied dataset
 }
 \description{
-
-}
-\details{
-
+Multiple Adonis Test for Taxon Table
 }
 \examples{
 datasets <- list('meio'= t(meio[,9:27]),'crust'= t(crust[,9:27]),'NeHaCyMi'= t(NeHaCyMi[,9:27]))
